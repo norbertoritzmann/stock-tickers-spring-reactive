@@ -4,22 +4,22 @@ import java.math.BigDecimal;
 
 public class Quote {
 
-	private String stock;
+	private String symbol;
 
 	private BigDecimal price;
 
-	public Quote(String stock, Double price) {
+	public Quote(String symbol, Double price) {
 		super();
-		this.stock = stock;
+		this.symbol = symbol;
 		this.price = BigDecimal.valueOf(price);
 	}
 
-	public String getStock() {
-		return stock;
+	public String getSymbol() {
+		return symbol;
 	}
 
-	public void setStock(String stock) {
-		this.stock = stock;
+	public void setSymbol(String symbol) {
+		this.symbol = symbol;
 	}
 
 	public BigDecimal getPrice() {
@@ -30,4 +30,8 @@ public class Quote {
 		this.price = price;
 	}
 
+	@Override
+	public String toString() {
+		return "[" + symbol + ": " + price.toString() + "]";
+	}
 }

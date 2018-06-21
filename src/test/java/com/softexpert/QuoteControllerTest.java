@@ -18,11 +18,11 @@ public class QuoteControllerTest {
 	@Test
 	public void testQuotes() {
 		webTestClient
-				.get().uri("/quotes")
-				.accept(MediaType.TEXT_PLAIN)
+				.get().uri("/quotes/aapl")
+				.accept(MediaType.APPLICATION_JSON)
 				.exchange()
 				.expectStatus().isOk()
-				.expectBody(String.class).isEqualTo("Hello, WebFlux!");
+				.expectBody(Quote.class).consumeWith(quote -> System.out.println(quote.getResponseBody().getPrice()));
 	}
 
 }

@@ -1,10 +1,10 @@
 package com.softexpert;
 
 import java.time.Duration;
-import java.util.Arrays;
-import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import reactor.core.publisher.Flux;
@@ -14,23 +14,21 @@ public class QuoteController {
 
 	Duration pushInterval = Duration.ofSeconds(1);
 
-	private List<Quote> quotes = Arrays.asList(
-            new Quote("VMW", 215.35),
-            new Quote("GOOG", 309.17),
-            new Quote("CTXS", 112.11),
-            new Quote("DELL", 92.23),
-            new Quote("MSFT", 75.19),
-            new Quote("ORCL", 115.72),
-            new Quote("RHT", 111.19)
-    );
-
-	@GetMapping("/quotes")
-	Flux<Quote> list() {
+	@GetMapping("/quotes/{symbol}")
+	Flux<Quote> subscribe(@PathVariable("symbol") String symbol) {
 		return Flux.interval(pushInterval)
-				.map(index -> {
-                    return quotes.get(index.intValue() % quotes.size());
-                })
+				.map(index -> this.next(symbol))
+				.log();
+	}
+	
+	@GetMapping("/quotes/emitter/{symbol}")
+	Flux<Quote> emitterSubscription(@PathVariable("symbol") String symbol) {
+		return Flux.interval(pushInterval)
+				.map(index -> this.next(symbol))
 				.log();
 	}
 
+	Quote next(String symbol) {
+		return new Quote(symbol, ThreadLocalRandom.current().nextDouble());
+	}
 }
