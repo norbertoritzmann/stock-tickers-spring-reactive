@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<input type="text" id="symbol" />
+		<button id="add-button">Add</button>
+		<div id="container"></div>
+	</div>
+	<script>
+		var source;
+
+		function connect() {
+			source = new EventSource(getSubscriptionUrl());
+			source.onmessage = function(event) {
+				$("#" + event.symbol).html(event.price);
+			};
+
+			source.onopen = function(event) {
+				$("#container").append('<div class="module_holder"><div id="' + $("#symbol").val() + '" class="module_item"></div></div>');
+			};
+		}
+
+		function getSubscriptionUrl() {
+			var protocol = window.location.protocol + "//";
+			var host = window.location.host;
+			var serverPath = "/quotes";
+
+			return protocol + host + serverPath;
+		}
+
+		$(function() {
+
+			$("#add-button").click(function() {
+				alert("chegou aqui");
+				connect();
+				return false;
+			});
+
+		});
+	</script>
+</body>
+</html>
