@@ -83,3 +83,6 @@ local.properties
 
 # PDT-specific
 .buildpath
+
+#Spring
+.springBeans
